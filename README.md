@@ -4,7 +4,19 @@ Simple cloth simulation in C using raylib
 
 [![Watch the video](https://img.youtube.com/vi/N-ff9OTw24g/0.jpg
 )](https://youtu.be/N-ff9OTw24g)
+# Run it yourself :)
 
+Simply download it and run
+```sh
+make
+```
+then
+
+```sh
+make run
+```
+
+If you have raylib installed, it should work
 
 ## Verlet
 
@@ -49,3 +61,4 @@ Most of the code is in `cloth.c` and is there simply to create the data structur
 ## Performance
 
 Overall you can expect 300 FPS on average with some lower time at startup
+
