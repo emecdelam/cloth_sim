@@ -56,7 +56,7 @@ void add_link(Cloth* cloth, Vector3 x1, Vector3 x2) {
     
     cloth->links = (ClothLink*)realloc(cloth->links, sizeof(ClothLink) * (cloth->n_link + 1));
     
-    ClothLink l = {.x1 = idx1, .x2 = idx2};
+    ClothLink l = {.x1 = idx1, .x2 = idx2, .skip = false};
     cloth->links[cloth->n_link] = l;
     cloth->n_link++;
 }
@@ -97,7 +97,9 @@ Cloth* init_cloth(void) {
 void draw_cloth(Cloth* cloth) {
     for (int i = 0; i < cloth->n_link; i++){
         ClothLink link = cloth->links[i];
-        DrawLine3D(cloth->points[link.x1].position, cloth->points[link.x2].position, RAYWHITE);
+        if (!link.skip){
+            DrawLine3D(cloth->points[link.x1].position, cloth->points[link.x2].position, RAYWHITE);
+        }
     }
 }
 

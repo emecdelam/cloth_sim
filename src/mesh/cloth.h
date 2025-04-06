@@ -1,7 +1,6 @@
 #pragma once
 #include "../cons.h"
 
-
 typedef struct Point {
     Vector3 position;
     Vector3 acceleration;
@@ -12,6 +11,7 @@ typedef struct Point {
 typedef struct Link {
     int x1;
     int x2;
+    bool skip;
 } ClothLink;
 
 typedef struct Cloth {
