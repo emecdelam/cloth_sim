@@ -39,7 +39,7 @@ int main() {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Cloth Sim");
     log_info("Window created");
     
-    //SetTargetFPS(60);
+    SetTargetFPS(60);
     log_info("Raylib Version: %s", RAYLIB_VERSION);
     
 

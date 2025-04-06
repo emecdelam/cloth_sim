@@ -14,7 +14,7 @@
 #define NUM 50 // Number of square
 #define TARGET_LINK (SIZE / ((float) NUM)) // Watch out for rounding
 
-#define GRAVITY ((Vector3) {0.0, 0.0f, -2.5})
+#define GRAVITY ((Vector3) {0.0, 0.0f, -3.0})
 #define ITERATIONS 8 // Verlet interations
 
 #define MOUSE_SIZE 10 // Radius to delete cloth
