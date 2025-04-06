@@ -1,6 +1,6 @@
 #include "mesh.h"
 #include "rlgl.h" 
-
+#include "cloth.h"
 
 
 Matrix transform = {
@@ -11,53 +11,65 @@ Matrix transform = {
 };
 
 Mesh __mesh;
-Material __material;
+Cloth __cloth;
 
-
-
-Mesh* init_mesh(void) {  
-    __mesh = GenMeshPlane(7.0,7.0,NUM_X,NUM_Y);
+Mesh* init_mesh(void) {
+    __mesh = GenMeshPlane(SIZE, SIZE, NUM, NUM);
     return &__mesh;
 }
-Material* init_material(void){
-    __material = LoadMaterialDefault();
-    __material.maps[MATERIAL_MAP_DIFFUSE].color = RAYWHITE;
-    return &__material;
-}
+
 
 void update_mesh(Mesh* mesh, float time) {
-    // Safety check
+    return;
     if (!mesh || mesh->vertices == NULL) return;
     
-    // Update each vertex position to create wave effect
     for (int i = 0; i < mesh->vertexCount; i++) {
         float* vert = &mesh->vertices[i*3];
         float x = vert[0];
         float z = vert[2];
         
-        // Create wave pattern based on position and time
         float waveHeight = 0.2f;
         float waveFreq = 3.0f;
         float speed = 2.0f;
         
-        // Apply sine wave in Y direction (height)
         vert[1] = waveHeight * sinf(waveFreq * (x + z) + time * speed);
     }
     
-    // Update the mesh buffer on GPU
     UpdateMeshBuffer(*mesh, 0, mesh->vertices, mesh->vertexCount * 3 * sizeof(float), 0);
 }
 
 
-void draw_mesh(Mesh* mesh, Material* material){
-    rlEnableWireMode();
-    DrawMesh(*mesh, *material, transform);
-    rlDisableWireMode();
-}
-
-void draw_colored_mesh(Mesh mesh, Vector3 position, Color tint) {
-    Model model = LoadModelFromMesh(mesh);
-    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].color = tint;
-    DrawModel(model, position, 1.0f, WHITE);
-    UnloadModel(model);
+void draw_mesh(Mesh *mesh) {
+    Color lineColor = WHITE;
+    int vertsPerRow = NUM + 1;
+    for (int z = 0; z <= NUM; z++)
+    {
+        for (int x = 0; x <= NUM; x++)
+        {
+            int idx1 = z * vertsPerRow + x;
+            Vector3 v1 = {
+                mesh->vertices[idx1 * 3 + 0],
+                mesh->vertices[idx1 * 3 + 1],
+                mesh->vertices[idx1 * 3 + 2]
+            };
+            if (x < NUM){
+                int idx2 = idx1 + 1;
+                Vector3 v2 = {
+                    mesh->vertices[idx2 * 3 + 0],
+                    mesh->vertices[idx2 * 3 + 1],
+                    mesh->vertices[idx2 * 3 + 2]
+                };
+                DrawLine3D(v1, v2, lineColor);
+            }
+            if (z < NUM){
+                int idx2 = (z + 1) * vertsPerRow + x;
+                Vector3 v2 = {
+                    mesh->vertices[idx2 * 3 + 0],
+                    mesh->vertices[idx2 * 3 + 1],
+                    mesh->vertices[idx2 * 3 + 2]
+                };
+                DrawLine3D(v1, v2, lineColor);
+            }
+        }
+    }
 }
