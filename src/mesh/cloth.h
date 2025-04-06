@@ -6,22 +6,22 @@ typedef struct Point {
     Vector3 position;
     Vector3 acceleration;
     Vector3 old_position;
+    bool constrained;
 } ClothPoint;
 
 typedef struct Link {
-    ClothPoint* x1;
-    ClothPoint* x2;
+    int x1;
+    int x2;
 } ClothLink;
 
 typedef struct Cloth {
-    unsigned int n_point;
+    int n_point;
     ClothPoint* points;
-    unsigned int n_link;
+    int n_link;
     ClothLink* links;
 } Cloth;
 
-void verlet_point(ClothPoint* point, float dt);
-void verlet_point_solver(Cloth* cloth ,float dt);
-void verlet_link(ClothLink* link);
-void apply_acceleration(Cloth* cloth, Vector3 acc);
-Cloth* init_cloth(Mesh* mesh);
+
+Cloth* init_cloth();
+void draw_cloth(Cloth* cloth);
+void free_cloth(Cloth* cloth);

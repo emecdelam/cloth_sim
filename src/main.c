@@ -1,8 +1,7 @@
 #include "cons.h"
-#include "mesh/mesh.c"
 #include "input/key.c"
 #include "mesh/cloth.c"
-
+#include "mesh/verlet.c"
 
 int main() {
     log_info("Starting program");
@@ -24,30 +23,32 @@ int main() {
     
 
 
-    Mesh* mesh = init_mesh();
 
+    Cloth* cloth = init_cloth();
     
 
-    float start_time = 0.0f;
+
     log_info("Entering main loop");
     // -- Main game loop
     while (!WindowShouldClose()) {
         HandleKeypress();
-        start_time += GetFrameTime();
-        update_mesh(&__mesh, start_time);
+        float dt = GetFrameTime();
+        if (dt > 0.016f) dt = 0.016f;
+
         // -- Drawing
         BeginDrawing();
             ClearBackground((Color){ 50, 50, 50, 255 });
             DrawFPS(10, 10);
             // -- Mesh draw
             BeginMode3D(camera);
-                draw_mesh(mesh);
+                draw_cloth(cloth);
             EndMode3D();            
         EndDrawing();
     }
     // -- Cleanup
     log_info("Cleaning up...");
-    UnloadMesh(*mesh);
+
+    free_cloth(cloth);
     CloseWindow();    
     return 0;
 }
