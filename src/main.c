@@ -4,14 +4,17 @@
 #include <float.h>
 
 
-
+/**
+ * Handles key presses
+ */
 void key_press(Cloth* cloth, Camera camera) {
     if (IsKeyPressed(KEY_ESCAPE)) {
         CloseWindow();
     }
-    
+
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         Vector2 mousePos = GetMousePosition();
+        // -- Iterating over all link to find close nodes
         for (int i = 0; i < cloth->n_link; i++) {
             if (cloth->links[i].skip){
                 continue;
@@ -20,9 +23,11 @@ void key_press(Cloth* cloth, Camera camera) {
             Vector2 screen_pos_2 = GetWorldToScreen(cloth->points[cloth->links[i].x2].position, camera);
             if (Vector2Distance(mousePos, screen_pos_1) < MOUSE_SIZE){
                 cloth->links[i].skip = true;
+                break; // Premature exit to avoid scanning useless links
             }
             if (Vector2Distance(mousePos, screen_pos_2) < MOUSE_SIZE){
                 cloth->links[i].skip = true;
+                break;
             }
         }
     }   
@@ -34,11 +39,11 @@ int main() {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Cloth Sim");
     log_info("Window created");
     
-    SetTargetFPS(60);
+    //SetTargetFPS(60);
     log_info("Raylib Version: %s", RAYLIB_VERSION);
     
 
-    
+    // -- Camera
     Camera3D camera = { 0 };
     camera.position = (Vector3){ 0.0f, 7.0f, 0.0f };
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
@@ -50,9 +55,10 @@ int main() {
     Cloth* cloth = init_cloth();
 
 
-    log_info("Entering main loop");
+
 
     // -- Main game loop
+    log_info("Entering main loop");
     while (!WindowShouldClose()) {
         
         // -- Key press
@@ -72,7 +78,8 @@ int main() {
             // -- Mesh draw
             BeginMode3D(camera);
                 draw_cloth(cloth);
-            EndMode3D();            
+            EndMode3D();
+            
         EndDrawing();
     }
 
