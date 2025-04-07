@@ -58,6 +58,8 @@ As you can see it is quite simple, the quad mesh comes from the generation algor
 
 Most of the code is in `cloth.c` and is there simply to create the data structure, this takes some time at startup but once done the rendering is done it runs smoothly
 
+Reagarding the "wind" this is added to avoid a stalling cloth, a simple acceleration is added to each node
+
 ## Performance
 
 Overall you can expect 300 FPS on average with some lower time at startup
