@@ -2,6 +2,8 @@
 #include "mesh/cloth.c"
 #include "mesh/verlet.c"
 #include <float.h>
+#include <raylib.h>
+#include <stdio.h>
 
 
 /**
@@ -67,13 +69,18 @@ int main() {
         // -- Physics
         float dt = GetFrameTime();
         if (dt > 0.016f) dt = 0.016f;
-        Vector3 wind = (Vector3){ -0.3f, 0.3f, 0.3f };
+        Vector3 wind = (Vector3){ -0.3f, -0.3f, 0.3f };
         update_cloth(cloth, dt, wind);
 
         // -- Drawing
         BeginDrawing();
             ClearBackground((Color){ 50, 50, 50, 255 });
-            DrawFPS(10, 10);
+
+            // -- Fps count
+            char fps[4];
+            sprintf(fps, "%i", GetFPS());
+            DrawText(fps, 10, 10, 16, RAYWHITE);
+            //DrawFPS(10, 10);
 
             // -- Mesh draw
             BeginMode3D(camera);
